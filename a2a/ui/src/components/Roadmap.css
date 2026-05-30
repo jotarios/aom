@@ -1,0 +1,189 @@
+.rm {
+  width: min(100%, 1040px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* Eyebrow header — mirrors AgentShowcase: mono label + dim mono note. */
+.rm-eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--hairline);
+}
+.rm-note {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink-dim);
+  margin-left: auto;
+}
+
+/* Vertical timeline — left spine of nodes joined by a connector line. */
+.rm-track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rm-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: var(--space-4);
+  padding-bottom: var(--space-5);
+}
+.rm-item:last-child {
+  padding-bottom: 0;
+}
+
+/* The spine cell: a node, with a connector running down to the next node. */
+.rm-spine {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding-top: 2px;
+}
+.rm-connector {
+  position: absolute;
+  top: 24px;
+  bottom: calc(-1 * var(--space-5));
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: var(--hairline-strong);
+}
+
+.rm-node {
+  position: relative;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1;
+  color: var(--ink-mute);
+}
+
+/* States (glyph + color + label). Done = gold (value/settled); a done node lights
+   the connector to the next milestone. Next = pearl, gently pulsing. Planned = dim. */
+.rm-done .rm-node {
+  color: var(--forged-gold);
+  border-color: color-mix(in srgb, var(--forged-gold) 55%, transparent);
+  background: color-mix(in srgb, var(--forged-gold) 10%, var(--surface));
+}
+.rm-done .rm-connector {
+  background: color-mix(in srgb, var(--forged-gold) 45%, transparent);
+}
+.rm-next .rm-node {
+  color: var(--pearl);
+  border-color: color-mix(in srgb, var(--pearl) 50%, transparent);
+  animation: rm-pulse 1.4s var(--ease-in-out) infinite;
+}
+.rm-planned .rm-node {
+  color: var(--ink-dim);
+  border-color: var(--hairline);
+}
+
+@keyframes rm-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Honor reduced-motion (DESIGN.md §6): drop the pulse, keep the "next" node visible. */
+@media (prefers-reduced-motion: reduce) {
+  .rm-next .rm-node {
+    animation: none;
+  }
+}
+
+/* Card-like body. No colored left-border (DESIGN.md §8) — the spine carries state. */
+.rm-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.rm-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.rm-phase {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--ink-dim);
+  flex: none;
+}
+.rm-title {
+  font-family: var(--font-sans);
+  font-size: var(--type-body);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0;
+}
+.rm-status {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-left: auto;
+  flex: none;
+}
+.rm-done .rm-status {
+  color: var(--forged-gold);
+}
+.rm-next .rm-status {
+  color: var(--pearl-dim);
+}
+.rm-planned .rm-status {
+  color: var(--ink-dim);
+}
+
+.rm-detail {
+  margin: 0;
+  max-width: 64ch;
+  font-size: var(--type-body-sm);
+  line-height: 1.5;
+  color: var(--ink-mute);
+}
+/* Planned milestones recede. */
+.rm-planned .rm-title {
+  color: var(--ink-mute);
+}
+.rm-planned .rm-detail {
+  color: var(--ink-dim);
+}
+
+.rm-foot {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-dim);
+  margin: 0;
+  padding-top: var(--space-2);
+}
+
+@media (max-width: 600px) {
+  .rm-note {
+    display: none;
+  }
+  .rm-status {
+    margin-left: 0;
+  }
+}

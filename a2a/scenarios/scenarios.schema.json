@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aom.local/scenarios.schema.json",
+  "title": "AOM Scenario Config",
+  "description": "Data-only config for one agentic scenario. Adding a scenario = drop one JSON file here. No code in any of the four languages.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "mode", "wallets", "story", "agentB", "proof", "run"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Scenario id; must match the filename (toll.json -> toll) and the data/<id>/ directory."
+    },
+    "mode": {
+      "enum": ["single", "race"],
+      "description": "single = one Agent A wallet, one settlement. race = N wallets contend for one resource, first-funded wins, losers refund."
+    },
+    "wallets": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 8,
+      "description": "Number of Agent A wallets. single uses 1; race uses >1."
+    },
+    "resourceId": {
+      "type": ["string", "null"],
+      "description": "race only: the contested resource (ticketId/seatId). null in single mode."
+    },
+    "amountMon": {
+      "type": "string",
+      "default": "0.1",
+      "description": "Escrow amount per lock, in MON (decimal string)."
+    },
+    "story": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hook", "agentA", "agentB"],
+      "properties": {
+        "hook": { "type": "string", "description": "One-line pitch shown on the idle screen." },
+        "agentA": { "type": "string", "description": "Agent A display name (e.g. Car Wallet)." },
+        "agentB": { "type": "string", "description": "Agent B display name (e.g. Toll Oracle)." },
+        "outcome": { "type": "string", "description": "Short (3-5 word) outcome headline for the scenario card, e.g. 'Pay a toll, no app.'" },
+        "agentBRole": { "type": "string", "description": "Short specialist caption under Agent B on the card, e.g. 'best-execution specialist'." },
+        "icon": { "type": "string", "description": "An emoji identifying the scenario on its card, e.g. '🚗'." },
+        "agentADesc": { "type": "string", "description": "One-line description of Agent A's job, shown in its console panel header." },
+        "agentBDesc": { "type": "string", "description": "One-line description of Agent B's job, shown in its console panel header." }
+      }
+    },
+    "agentB": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "computeMs", "panel", "data"],
+      "properties": {
+        "label": { "type": "string", "description": "Verb-phrase shown while computing (e.g. Verifying GPS passage proof...)." },
+        "computeMs": { "type": "integer", "minimum": 0, "maximum": 5000, "description": "Mocked compute delay before completeTask." },
+        "panel": { "enum": ["keyvalue", "table", "balance"], "description": "Right-panel renderer." },
+        "data": { "description": "Free-form payload the chosen panel renders. Shape depends on panel type." }
+      }
+    },
+    "proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fields"],
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Ordered field names forming the keccak256 proof recipe."
+        }
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["count", "spacingMs"],
+      "properties": {
+        "count": { "type": "integer", "minimum": 1, "maximum": 20, "description": "Autonomous-loop iterations (single mode). In race mode, one round of `wallets` locks." },
+        "spacingMs": { "type": "integer", "minimum": 0, "maximum": 60000, "description": "Delay between autonomous iterations." }
+      }
+    }
+  }
+}

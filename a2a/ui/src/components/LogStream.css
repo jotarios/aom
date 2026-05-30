@@ -1,0 +1,54 @@
+.log-stream {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding-right: var(--space-2);
+}
+
+.log-row {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  gap: var(--space-3);
+  padding: 6px var(--space-3);
+  font-size: var(--type-log);
+  line-height: 1.5;
+  border-radius: var(--radius-sm);
+  animation: log-in var(--dur-xs) var(--ease-out);
+}
+.log-row + .log-row {
+  margin-top: 2px;
+}
+
+.log-ts {
+  color: var(--ink-dim);
+}
+.log-tag {
+  color: var(--forged-gold);
+}
+.log-msg {
+  color: var(--ink);
+  word-break: break-word;
+}
+.log-hash {
+  color: var(--pearl-dim);
+  cursor: copy;
+}
+.log-row[data-level="ok"] .log-tag {
+  color: var(--ok);
+}
+.log-row[data-level="error"] .log-tag {
+  color: var(--error);
+}
+
+@keyframes log-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

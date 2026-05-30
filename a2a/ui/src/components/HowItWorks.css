@@ -1,0 +1,92 @@
+.hiw {
+  width: min(100%, 1040px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.hiw-eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.hiw-note {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink-dim);
+  margin-left: auto;
+}
+
+.hiw-row {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.hiw-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-card);
+}
+
+.hiw-step-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.hiw-num {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--ink-dim);
+}
+.hiw-glyph {
+  font-size: 16px;
+  line-height: 1;
+}
+/* Progressive state: pending → computing → settled, gold lands on the final step. */
+.hiw-step--0 .hiw-glyph {
+  color: var(--ink-mute);
+}
+.hiw-step--1 .hiw-glyph {
+  color: var(--pearl);
+}
+.hiw-step--2 .hiw-glyph {
+  color: var(--forged-gold);
+}
+.hiw-step--2 {
+  border-color: color-mix(in srgb, var(--forged-gold) 30%, transparent);
+}
+
+.hiw-title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-h3);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.hiw-detail {
+  margin: 0;
+  font-size: var(--type-body-sm);
+  line-height: 1.5;
+  color: var(--ink-mute);
+}
+
+@media (max-width: 760px) {
+  .hiw-row {
+    grid-template-columns: 1fr;
+  }
+  .hiw-note {
+    display: none;
+  }
+}

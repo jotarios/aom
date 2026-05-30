@@ -1,0 +1,78 @@
+.topbar {
+  position: sticky;
+  top: var(--space-3);
+  z-index: 10;
+  margin: var(--space-3) auto 0;
+  width: min(100% - var(--space-6), 1400px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-card);
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+.topbar-mark {
+  color: var(--forged-gold);
+  font-size: 16px;
+}
+
+.topbar-phases {
+  display: flex;
+  gap: var(--space-4);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.topbar-phase {
+  color: var(--ink-dim);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color var(--dur-sm) ease;
+}
+.topbar-phase-num {
+  color: var(--ink-dim);
+}
+.topbar-phase-active {
+  color: var(--ink);
+}
+.topbar-phase-active .topbar-phase-num {
+  color: var(--forged-gold);
+}
+
+.topbar-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.topbar-dot-open {
+  color: var(--ok);
+}
+.topbar-dot-reconnecting {
+  color: var(--error);
+}
+.topbar-dot-connecting {
+  color: var(--warn);
+}
+
+@media (max-width: 820px) {
+  .topbar-phases {
+    display: none;
+  }
+}

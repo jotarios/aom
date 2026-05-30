@@ -1,0 +1,45 @@
+.seam {
+  position: relative;
+  width: 1px;
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+}
+
+.seam-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--hairline-strong);
+}
+
+/* The gold pulse travels left→right across the seam. Reveal clamped to ~520ms so
+   the eye can track it (T8). Only transform + opacity animate. */
+.seam-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  background: var(--forged-gold);
+  box-shadow: 0 0 16px 4px color-mix(in srgb, var(--forged-gold) 70%, transparent);
+  animation: seam-travel var(--dur-lg) var(--ease-out);
+}
+
+@keyframes seam-travel {
+  0% {
+    transform: translateX(-40px) scale(0.6);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(40px) scale(1);
+    opacity: 0;
+  }
+}
+

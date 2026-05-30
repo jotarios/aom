@@ -1,0 +1,72 @@
+.as {
+  width: min(100%, 1040px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.as-eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.as-note {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink-dim);
+  margin-left: auto;
+}
+
+.as-row {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-3);
+}
+
+.as-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-card);
+  transition: border-color var(--dur-sm) ease, transform var(--dur-sm) var(--ease-spring);
+}
+.as-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--hairline-strong);
+}
+
+/* Brand wordmark — sans, the human-recognizable name. */
+.as-name {
+  font-family: var(--font-sans);
+  font-size: var(--type-body);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+/* The agent's specialty — machine state, mono + dim. */
+.as-role {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-mute);
+}
+
+@media (max-width: 900px) {
+  .as-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .as-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .as-note {
+    display: none;
+  }
+}

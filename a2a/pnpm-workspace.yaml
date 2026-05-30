@@ -1,0 +1,7 @@
+packages:
+  - "shared"
+  - "hub"
+  - "ui"
+  - "tools"
+allowBuilds:
+  esbuild: true

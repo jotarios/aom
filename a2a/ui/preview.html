@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en" style="color-scheme: dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AOM · Timeline layout preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/tokens.css" />
+    <style>
+      body { padding: 32px; }
+      h2.opt { font-family: var(--font-sans); font-size: 22px; letter-spacing: -0.02em; margin: 40px 0 4px; }
+      h2.opt .tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--forged-gold); padding: 3px 8px; border-radius: 4px; background: color-mix(in srgb, var(--forged-gold) 12%, transparent); margin-right: 10px; }
+      p.note { font-family: var(--font-mono); font-size: 12px; color: var(--ink-mute); margin: 0 0 16px; }
+
+      .console {
+        display: grid; grid-template-columns: 1fr 1px 1fr; grid-template-rows: auto auto;
+        border: 1px solid var(--hairline); border-radius: var(--radius-card); overflow: hidden; background: var(--bg);
+      }
+      .panel { padding: 20px; }
+      .panel-a { background: linear-gradient(180deg, color-mix(in srgb, var(--forged-gold) 4%, var(--surface)), var(--surface)); }
+      .panel-b { background: linear-gradient(180deg, color-mix(in srgb, var(--pearl) 4%, var(--surface)), var(--surface)); }
+      .head { display:flex; align-items:center; gap:12px; padding-bottom:14px; margin-bottom:14px; border-bottom:1px solid var(--hairline); }
+      .badge { font-family: var(--font-mono); font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; padding:4px 10px; border-radius:999px; }
+      .badge-a { background: color-mix(in srgb, var(--forged-gold) 14%, transparent); color: var(--forged-gold); }
+      .badge-b { background: color-mix(in srgb, var(--pearl) 12%, transparent); color: var(--pearl); }
+      .role { font-family: var(--font-mono); font-size:14px; color: var(--ink-mute); }
+      .log { font-family: var(--font-mono); font-size:13px; line-height:1.7; }
+      .log .ts { color: var(--ink-dim); }
+      .log .tag { color: var(--forged-gold); }
+      .log .tag.ok { color: var(--ok); }
+      .log .msg { color: var(--ink); }
+      .seam { position: relative; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+      .seam-line { position:absolute; top:0; bottom:0; width:1px; background: var(--hairline-strong); }
+      .seam-dot { width:10px;height:10px;border-radius:50%;background:var(--forged-gold);box-shadow:0 0 16px 4px color-mix(in srgb,var(--forged-gold) 70%,transparent); }
+      .rail { margin-top:14px; display:flex; flex-direction:column; gap:8px; }
+      .rr { font-family: var(--font-mono); display:flex;flex-direction:column;align-items:center;padding:8px 12px;border-radius:8px;background:color-mix(in srgb,var(--surface) 80%,transparent);border:1px solid var(--hairline); }
+      .rr.dashed { border-style:dashed; }
+      .rr .l { font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-mute); }
+      .rr .v { font-size:14px;font-weight:500; }
+      .rr.ring .v { color: var(--forged-gold); }
+      .rr.rpc .v { color: var(--ink-mute); }
+      .ledger { grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; padding:14px 24px; background:var(--surface); border-top:1px solid var(--hairline-strong); font-family:var(--font-mono); font-size:14px; }
+      .ledger .ok { color: var(--ok); }
+      .ledger .lat { font-size:20px; color: var(--forged-gold); }
+
+      /* ---- timeline ---- */
+      .timeline { display:flex; flex-direction:column; padding:8px 0; }
+      .tl-row { display:grid; grid-template-columns:1fr auto 1fr; align-items:stretch; gap:16px; min-height:56px; }
+      .tl-cell { display:flex; align-items:center; min-width:0; }
+      .tl-left { justify-content:flex-end; }
+      .tl-right { justify-content:flex-start; }
+      .tl-spine { position:relative; width:28px; display:flex; align-items:center; justify-content:center; }
+      .tl-conn { position:absolute; width:2px; left:50%; transform:translateX(-50%); background:var(--hairline-strong); }
+      .tl-conn.top { top:0; height:calc(50% - 14px); }
+      .tl-conn.bot { bottom:0; height:calc(50% - 14px); }
+      .tl-node { position:relative; z-index:1; width:24px;height:24px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--hairline-strong);background:var(--surface);font-family:var(--font-mono);font-size:12px;color:var(--ink-mute); }
+      .done .tl-node { color:var(--forged-gold); border-color:color-mix(in srgb,var(--forged-gold) 55%,transparent); background:color-mix(in srgb,var(--forged-gold) 10%,var(--surface)); }
+      .done .tl-conn.bot { background:color-mix(in srgb,var(--forged-gold) 45%,transparent); }
+      .active .tl-node { color:var(--pearl); border-color:color-mix(in srgb,var(--pearl) 50%,transparent); }
+      .pending .tl-node { color:var(--ink-dim); border-color:var(--hairline); }
+      .tl-act { display:inline-flex; align-items:baseline; gap:12px; font-family:var(--font-mono); }
+      .tl-act.right { flex-direction:row-reverse; text-align:right; }
+      .tl-num { font-size:11px;font-weight:600;letter-spacing:0.16em;color:var(--forged-gold);padding:3px 7px;border-radius:4px;background:color-mix(in srgb,var(--forged-gold) 12%,transparent);flex:none; }
+      .pending .tl-num { color:var(--ink-dim); background:var(--surface-2); }
+      .tl-txt { display:flex; flex-direction:column; gap:2px; }
+      .tl-owner { font-size:14px; color:var(--ink); }
+      .pending .tl-owner { color: var(--ink-mute); }
+      .tl-label { font-size:12px; color:var(--ink-mute); }
+      .pending { opacity:0.55; }
+      .tl-lat { font-family:var(--font-mono); font-size:12px; color:var(--ink-mute); margin-top:2px; }
+      .tl-lat .ring { color: var(--forged-gold); }
+
+      /* compact top-band timeline for option 2 */
+      .tl-band { display:flex; gap:8px; padding:14px 20px; border-bottom:1px solid var(--hairline-strong); background:var(--surface); }
+      .tl-chip { flex:1; display:flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:12px; }
+      .tl-chip .dot { width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:11px;border:1px solid var(--hairline-strong);flex:none; }
+      .tl-chip.done .dot { color:var(--forged-gold); border-color:color-mix(in srgb,var(--forged-gold) 55%,transparent); background:color-mix(in srgb,var(--forged-gold) 10%,var(--surface)); }
+      .tl-chip.active .dot { color:var(--pearl); border-color:color-mix(in srgb,var(--pearl) 50%,transparent); }
+      .tl-chip.pending { opacity:0.5; }
+      .tl-chip .num { color: var(--ink-mute); }
+      .tl-arrow { color: var(--ink-dim); align-self:center; }
+    </style>
+  </head>
+  <body>
+    <p class="note">Static mockups with sample data — pick one and I'll wire it into the live app.</p>
+
+    <!-- OPTION 1 -->
+    <h2 class="opt"><span class="tag">Option 1</span>Timeline replaces the logs</h2>
+    <p class="note">Shared phase rows. Agent A's actions left, Agent B's right, checkmark spine center. Ring/RPC readouts stay on the center seam. No separate text logs.</p>
+    <div class="console">
+      <div class="panel panel-a">
+        <div class="head"><span class="badge badge-a">Car Wallet</span><span class="role">Macro Buyer · 0x94f3…37F2</span></div>
+      </div>
+      <div class="seam"><div class="seam-line"></div><div class="seam-dot"></div></div>
+      <div class="panel panel-b">
+        <div class="head"><span class="badge badge-b">Toll Oracle</span><span class="role">Verifying GPS passage proof…</span></div>
+      </div>
+      <!-- timeline spans all three columns -->
+      <div style="grid-column:1/-1; padding: 8px 20px 16px;">
+        <div class="timeline">
+          <div class="tl-row done">
+            <div class="tl-cell tl-left"><div class="tl-act"><span class="tl-num">01</span><span class="tl-txt"><span class="tl-owner">Car Wallet</span><span class="tl-label">scopes the task</span></span></div></div>
+            <div class="tl-spine"><span class="tl-node">✓</span><span class="tl-conn bot"></span></div>
+            <div class="tl-cell tl-right"></div>
+          </div>
+          <div class="tl-row done">
+            <div class="tl-cell tl-left"><div class="tl-act"><span class="tl-num">02</span><span class="tl-txt"><span class="tl-owner">Car Wallet</span><span class="tl-label">locks 0.1 MON in escrow</span></span></div></div>
+            <div class="tl-spine"><span class="tl-conn top"></span><span class="tl-node">✓</span><span class="tl-conn bot"></span></div>
+            <div class="tl-cell tl-right"></div>
+          </div>
+          <div class="tl-row done">
+            <div class="tl-cell tl-left"></div>
+            <div class="tl-spine"><span class="tl-conn top"></span><span class="tl-node">✓</span><span class="tl-conn bot"></span></div>
+            <div class="tl-cell tl-right"><div class="tl-act"><span class="tl-num">03</span><span class="tl-txt"><span class="tl-owner">Toll Oracle</span><span class="tl-label">ring-buffer intercept fires</span><span class="tl-lat"><span class="ring">ring 0.6ms</span> · rpc 1459ms</span></span></div></div>
+          </div>
+          <div class="tl-row active">
+            <div class="tl-cell tl-left"></div>
+            <div class="tl-spine"><span class="tl-conn top"></span><span class="tl-node">◐</span><span class="tl-conn bot"></span></div>
+            <div class="tl-cell tl-right"><div class="tl-act"><span class="tl-num">04</span><span class="tl-txt"><span class="tl-owner">Toll Oracle</span><span class="tl-label">verifies the proof</span></span></div></div>
+          </div>
+          <div class="tl-row pending">
+            <div class="tl-cell tl-left"></div>
+            <div class="tl-spine"><span class="tl-conn top"></span><span class="tl-node">○</span></div>
+            <div class="tl-cell tl-right"><div class="tl-act"><span class="tl-num">05</span><span class="tl-txt"><span class="tl-owner">Toll Oracle</span><span class="tl-label">claims & settles on-chain</span></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="ledger"><span><span class="ok">●</span> TaskFunded → TaskCompleted · 0.1 MON</span><span class="lat">480<span style="font-size:13px;color:var(--ink-mute)"> ms</span></span></div>
+    </div>
+
+    <!-- OPTION 2 -->
+    <h2 class="opt"><span class="tag">Option 2</span>Timeline on top, logs below</h2>
+    <p class="note">Compact phase strip across the top; the two streaming logs stay beneath with the Ring/RPC seam between them, as today. Both views coexist.</p>
+    <div class="console">
+      <!-- compact band -->
+      <div class="tl-band" style="grid-column:1/-1;">
+        <div class="tl-chip done"><span class="dot">✓</span><span class="num">01</span> Intent</div>
+        <span class="tl-arrow">→</span>
+        <div class="tl-chip done"><span class="dot">✓</span><span class="num">02</span> Escrow</div>
+        <span class="tl-arrow">→</span>
+        <div class="tl-chip done"><span class="dot">✓</span><span class="num">03</span> Intercept</div>
+        <span class="tl-arrow">→</span>
+        <div class="tl-chip active"><span class="dot">◐</span><span class="num">04</span> Pipeline</div>
+        <span class="tl-arrow">→</span>
+        <div class="tl-chip pending"><span class="dot">○</span><span class="num">05</span> Settle</div>
+      </div>
+      <div class="panel panel-a">
+        <div class="head"><span class="badge badge-a">Car Wallet</span><span class="role">Macro Buyer</span></div>
+        <div class="log">
+          <div><span class="ts">14:10:12</span> <span class="tag">INTENT</span> <span class="msg">Car Wallet opens a task</span></div>
+          <div><span class="ts">14:10:14</span> <span class="tag">ESCROW_LOCK</span> <span class="msg">lockFunds(0x3cd1…) → 0.1 MON</span></div>
+          <div><span class="ts">14:10:17</span> <span class="tag ok">SETTLEMENT</span> <span class="msg">0.1 MON received</span></div>
+        </div>
+      </div>
+      <div class="seam"><div class="seam-line"></div><div class="seam-dot"></div>
+        <div class="rail"><div class="rr ring"><span class="l">ring</span><span class="v">0.6 ms</span></div><div class="rr rpc dashed"><span class="l">rpc</span><span class="v">1459 ms</span></div></div>
+      </div>
+      <div class="panel panel-b">
+        <div class="head"><span class="badge badge-b">Toll Oracle</span><span class="role">Verifying GPS passage proof…</span></div>
+        <div class="log">
+          <div><span class="ts">14:10:14</span> <span class="tag">INTERCEPT</span> <span class="msg">ring buffer intercept</span></div>
+          <div><span class="ts">14:10:14</span> <span class="tag">PIPELINE</span> <span class="msg">Verifying GPS passage proof…</span></div>
+          <div><span class="ts">14:10:17</span> <span class="tag ok">SETTLEMENT</span> <span class="msg">0.1 MON released to Toll Oracle</span></div>
+        </div>
+      </div>
+      <div class="ledger"><span><span class="ok">●</span> TaskFunded → TaskCompleted · 0.1 MON</span><span class="lat">480<span style="font-size:13px;color:var(--ink-mute)"> ms</span></span></div>
+    </div>
+
+    <div style="height:60px"></div>
+  </body>
+</html>

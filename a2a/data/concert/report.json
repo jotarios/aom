@@ -1,0 +1,8 @@
+{
+  "ticketId": "ticket-42",
+  "winnerAddress": "0x0000000000000000000000000000000000000000",
+  "blockNumber": 0,
+  "venue": "Estadio Obras",
+  "section": "GA",
+  "verdict": "ownership transfer valid"
+}

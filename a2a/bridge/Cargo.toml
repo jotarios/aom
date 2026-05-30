@@ -1,0 +1,30 @@
+[package]
+name = "aom-bridge"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "bridge"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+tokio-tungstenite = "0.24"
+futures-util = "0.3"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.12", features = ["json"] }
+hex = "0.4"
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+sha3 = "0.10"
+
+[features]
+# Phase 3: the real monad-exec-events SDK reader. Requires the Monad SDK + a
+# snapshot capture (not on crates.io). Off by default — Phase 2 ships the replay
+# reader, and the hard cut gate at hour 7 keeps replay-vs-rpc if this can't land.
+default = []
+sdk = []
+
+[dev-dependencies]

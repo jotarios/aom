@@ -1,0 +1,63 @@
+{
+  "id": "remittance",
+  "mode": "single",
+  "wallets": 1,
+  "resourceId": null,
+  "amountMon": "0.1",
+  "story": {
+    "hook": "LATAM sends $150B home a year. Banks take 6% and 3 days. Your wallet AI found the best corridor while you slept.",
+    "agentA": "Migrant Wallet AI",
+    "agentB": "Routing Agent",
+    "outcome": "Send money home, instantly.",
+    "agentBRole": "best-corridor router",
+    "icon": "💸",
+    "agentADesc": "Watches FX rates and locks funds the moment the best corridor appears.",
+    "agentBDesc": "Compares five corridors and routes the money through the cheapest one."
+  },
+  "agentB": {
+    "label": "Evaluating 5 FX corridors…",
+    "computeMs": 900,
+    "panel": "table",
+    "data": {
+      "columns": [
+        "corridor",
+        "total cost"
+      ],
+      "rows": [
+        [
+          "Wise",
+          "4.1%"
+        ],
+        [
+          "Bitso",
+          "3.8%"
+        ],
+        [
+          "USDC/ARS pool",
+          "2.9%"
+        ],
+        [
+          "MON bridge",
+          "2.4%"
+        ],
+        [
+          "local DEX",
+          "2.1% ← winner"
+        ]
+      ]
+    }
+  },
+  "proof": {
+    "fields": [
+      "corridorId",
+      "executedRate",
+      "fee",
+      "recipientAddress",
+      "blockNumber"
+    ]
+  },
+  "run": {
+    "count": 4,
+    "spacingMs": 9000
+  }
+}

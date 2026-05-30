@@ -1,0 +1,86 @@
+.agent-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  padding: var(--space-4) var(--space-5);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.agent-a {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--forged-gold) 4%, var(--surface)), var(--surface));
+}
+.agent-b {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--pearl) 4%, var(--surface)), var(--surface));
+}
+
+/* Active agent gets the gold inset ring (DESIGN.md §4 — the one allowed accent border). */
+.agent-active {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--forged-gold) 40%, transparent);
+}
+
+.agent-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* Title block: prefix eyebrow over the agent name. */
+.agent-title {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.agent-prefix {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.agent-prefix-a {
+  color: var(--gold-mute);
+}
+.agent-prefix-b {
+  color: var(--pearl-dim);
+}
+.agent-name {
+  font-family: var(--font-sans);
+  font-size: var(--type-h3);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+/* Right-stacked status pill + wallet. */
+.agent-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+  flex: none;
+}
+.agent-wallet {
+  font-size: var(--type-caption);
+}
+
+/* One-line description under the header. */
+.agent-desc {
+  margin: var(--space-3) 0 0;
+  max-width: 46ch;
+  font-size: var(--type-body-sm);
+  line-height: 1.45;
+  color: var(--ink-mute);
+}
+
+.agent-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-top: var(--space-4);
+  margin-top: var(--space-4);
+  border-top: 1px solid var(--hairline);
+}

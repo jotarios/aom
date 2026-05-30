@@ -1,0 +1,39 @@
+{
+  "id": "toll",
+  "mode": "single",
+  "wallets": 1,
+  "resourceId": null,
+  "amountMon": "0.1",
+  "story": {
+    "hook": "Autonomous vehicles pay tolls with no wallet app, no human in the loop.",
+    "agentA": "Car Wallet",
+    "agentB": "Toll Oracle",
+    "outcome": "Pay a toll, no app.",
+    "agentBRole": "GPS passage verifier",
+    "icon": "🚗",
+    "agentADesc": "Locks funds in escrow and hires a specialist — no app, no human in the loop.",
+    "agentBDesc": "Verifies the GPS passage proof and claims the payment when it checks out."
+  },
+  "agentB": {
+    "label": "Verifying GPS passage proof…",
+    "computeMs": 800,
+    "panel": "keyvalue",
+    "data": {
+      "node": "A-17",
+      "lat": -34.6037,
+      "lon": -58.3816,
+      "barrier": "CLOSED"
+    }
+  },
+  "proof": {
+    "fields": [
+      "vehicleId",
+      "nodeId",
+      "timestamp"
+    ]
+  },
+  "run": {
+    "count": 5,
+    "spacingMs": 8000
+  }
+}

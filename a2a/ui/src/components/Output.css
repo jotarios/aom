@@ -1,0 +1,50 @@
+.output {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.output-amount {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+.output-value {
+  font-size: var(--type-h1);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--forged-gold);
+  letter-spacing: -0.02em;
+}
+.output-unit {
+  font-size: var(--type-h3);
+  color: var(--gold-mute);
+}
+
+.output-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--type-body-sm);
+}
+.output-settled {
+  color: var(--ok);
+}
+.output-pending {
+  color: var(--ink-mute);
+}
+.output-to {
+  color: var(--ink-mute);
+}
+
+.output-detail {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: var(--type-caption);
+  color: var(--ink-mute);
+}
+.output-latency strong {
+  color: var(--forged-gold);
+  font-weight: 600;
+}

@@ -1,0 +1,1 @@
+{ "poolId": "aggregator", "inputARS": "100000", "outputUSDC": "97.0", "slippage": "1.9", "blockNumber": 0, "verdict": "swap executed at lowest slippage" }

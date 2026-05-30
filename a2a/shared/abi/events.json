@@ -1,0 +1,14 @@
+{
+  "TaskFunded": {
+    "signature": "TaskFunded(bytes32,address,uint256,bytes32)",
+    "topic0": "0xd4395f843b34deb19912041a8f197eb7dd4e9da92a83cafcd9669f20e08aab15"
+  },
+  "TaskCompleted": {
+    "signature": "TaskCompleted(bytes32,bytes32)",
+    "topic0": "0x6a3a17a2ee0f5a9660f62936a17b5adc124d313734df031f55ab6c55bac36cfa"
+  },
+  "TaskReverted": {
+    "signature": "TaskReverted(bytes32,string)",
+    "topic0": "0x3fab76f4fb7a337e358c98856914d6a9cc93b85e5a8a5959a2e5227417993e50"
+  }
+}

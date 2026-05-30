@@ -1,0 +1,19 @@
+[project]
+name = "aom-common"
+version = "0.1.0"
+description = "Shared event + scenario models for AOM Python agents."
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.6",
+    "web3>=6.20",
+    "eth-account>=0.11",
+    "eth-utils>=4.0",
+    "websockets>=13.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["aom_common"]

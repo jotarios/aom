@@ -1,0 +1,21 @@
+{
+  "name": "aom",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Agentic Open Market — dual-rail latency race demo on Monad.",
+  "type": "module",
+  "workspaces": [
+    "shared",
+    "hub",
+    "ui",
+    "tools"
+  ],
+  "scripts": {
+    "typecheck": "pnpm -r --if-present typecheck",
+    "build": "pnpm -r --if-present build",
+    "hub": "pnpm --filter @aom/hub start",
+    "mock": "pnpm --filter @aom/tools mock",
+    "ui": "pnpm --filter @aom/ui dev"
+  },
+  "packageManager": "pnpm@11.4.0"
+}

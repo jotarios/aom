@@ -1,0 +1,69 @@
+.ocp {
+  width: min(100%, 1040px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.ocp-eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.ocp-note {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink-dim);
+  margin-left: auto;
+}
+
+.ocp-grid {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+
+.ocp-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-card);
+}
+.ocp-stat-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.ocp-stat-value {
+  margin: 0;
+  font-size: var(--type-body-sm);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.ocp-gold {
+  color: var(--forged-gold);
+}
+.ocp-link {
+  color: var(--pearl-dim);
+  text-decoration: none;
+  transition: color var(--dur-sm) ease;
+}
+.ocp-link:hover {
+  color: var(--forged-gold);
+}
+
+@media (max-width: 760px) {
+  .ocp-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ocp-note {
+    display: none;
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "vehicleId": "AR-AV-0042",
+  "nodeId": "A-17",
+  "timestamp": "2026-05-30T14:02:11Z",
+  "lat": -34.6037,
+  "lon": -58.3816,
+  "barrier": "OPEN",
+  "verdict": "passage verified"
+}

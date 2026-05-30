@@ -1,0 +1,129 @@
+.sg-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.sg-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-card);
+  cursor: pointer;
+  transition:
+    transform var(--dur-sm) var(--ease-spring),
+    border-color var(--dur-sm) ease,
+    box-shadow var(--dur-sm) ease;
+}
+.sg-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--forged-gold) 35%, transparent);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+.sg-card:focus-visible {
+  outline: 2px solid var(--forged-gold);
+  outline-offset: 3px;
+}
+
+.sg-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* Scenario icon + outcome headline. */
+.sg-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.sg-icon {
+  font-size: 22px;
+  line-height: 1;
+  flex: none;
+}
+/* The outcome headline — what you get, in the brand voice (sans, not mono). */
+.sg-outcome {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-h3);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* agentA HIRES agentB — the relationship, demoted to a subtitle. */
+.sg-hires {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  margin-top: calc(-1 * var(--space-2));
+}
+.sg-agent--a { color: var(--forged-gold); }
+.sg-agent--b { color: var(--pearl-dim); }
+.sg-hires-verb {
+  color: var(--ink-dim);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+.sg-role {
+  margin: calc(-1 * var(--space-2)) 0 0;
+  font-size: var(--type-caption);
+  letter-spacing: 0.04em;
+  color: var(--ink-dim);
+}
+
+.sg-hook {
+  flex: 1;
+  margin: 0;
+  font-size: var(--type-body-sm);
+  line-height: 1.5;
+  color: var(--ink-mute);
+}
+
+.sg-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--hairline);
+}
+.sg-amount {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--ink-dim);
+}
+.sg-cta-hint {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--ink-dim);
+  transition: color var(--dur-sm) ease;
+}
+.sg-card:hover .sg-cta-hint {
+  color: var(--forged-gold);
+}
+
+@media (max-width: 600px) {
+  .sg-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "flight-seat",
+  "mode": "race",
+  "wallets": 5,
+  "resourceId": "seat-14C-AR1234",
+  "amountMon": "0.1",
+  "story": {
+    "hook": "Last seat. T-minus 2 hours. Five wallets. Who flies?",
+    "agentA": "Traveler Wallet",
+    "agentB": "Airline Oracle",
+    "outcome": "Grab the last seat.",
+    "agentBRole": "airline inventory oracle",
+    "icon": "✈️",
+    "agentADesc": "One of five travelers racing for the last seat — locks funds the moment it drops.",
+    "agentBDesc": "Confirms the seat is free and not double-booked, then hands the winner a boarding pass."
+  },
+  "agentB": {
+    "label": "Verifying seat availability…",
+    "computeMs": 650,
+    "panel": "table",
+    "data": {
+      "columns": [
+        "check",
+        "result"
+      ],
+      "rows": [
+        [
+          "seat available",
+          "pass"
+        ],
+        [
+          "no double-booking",
+          "pass"
+        ],
+        [
+          "boarding pass transfer",
+          "valid"
+        ]
+      ]
+    }
+  },
+  "proof": {
+    "fields": [
+      "seatId",
+      "winnerAddress",
+      "blockNumber"
+    ]
+  },
+  "run": {
+    "count": 2,
+    "spacingMs": 9000
+  }
+}

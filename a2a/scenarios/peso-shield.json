@@ -1,0 +1,42 @@
+{
+  "id": "peso-shield",
+  "mode": "single",
+  "wallets": 1,
+  "resourceId": null,
+  "amountMon": "0.1",
+  "story": {
+    "hook": "In Argentina, your salary loses value the moment it lands. Your wallet hedged it before you opened the notification.",
+    "agentA": "Salary Wallet AI",
+    "agentB": "Best-Execution Agent",
+    "outcome": "Hedge a salary in ms.",
+    "agentBRole": "best-execution specialist",
+    "icon": "🛡️",
+    "agentADesc": "Locks funds the instant payroll lands — before the peso loses value.",
+    "agentBDesc": "Scans DEX pools for the lowest slippage and swaps to USDC."
+  },
+  "agentB": {
+    "label": "Scanning DEX pools for lowest slippage…",
+    "computeMs": 850,
+    "panel": "balance",
+    "data": {
+      "label": "wallet balance",
+      "from": "100,000",
+      "unitFrom": "ARS",
+      "to": "97.0",
+      "unitTo": "USDC"
+    }
+  },
+  "proof": {
+    "fields": [
+      "poolId",
+      "inputARS",
+      "outputUSDC",
+      "slippage",
+      "blockNumber"
+    ]
+  },
+  "run": {
+    "count": 4,
+    "spacingMs": 9000
+  }
+}

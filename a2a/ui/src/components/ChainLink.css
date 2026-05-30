@@ -1,0 +1,39 @@
+.chain-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: inherit;
+  line-height: inherit;
+  cursor: pointer;
+  transition: background var(--dur-sm) ease, border-color var(--dur-sm) ease;
+}
+.chain-link:hover {
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  border-color: var(--hairline);
+}
+
+.chain-address .chain-value {
+  color: var(--pearl);
+}
+.chain-tx .chain-value {
+  color: var(--pearl-dim);
+}
+
+.chain-glyph {
+  font-size: 11px;
+  color: var(--ink-dim);
+  transition: color var(--dur-xs) ease, transform var(--dur-xs) var(--ease-out);
+}
+.chain-link:hover .chain-glyph {
+  color: var(--forged-gold);
+  transform: translate(1px, -1px);
+}
+.chain-link:focus-visible {
+  border-color: var(--forged-gold);
+  outline: none;
+}

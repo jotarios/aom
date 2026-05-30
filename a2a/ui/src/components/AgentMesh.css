@@ -1,0 +1,349 @@
+/* ── Section shell ─────────────────────────────────────── */
+.mesh {
+  width: min(100%, 1040px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.mesh-eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.mesh-note {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink-dim);
+  margin-left: auto;
+}
+
+/* ── Diagram card ──────────────────────────────────────── */
+.mesh-diagram {
+  display: grid;
+  /* left nodes | svg fanout | right agents */
+  grid-template-columns: auto 80px 1fr;
+  align-items: center;
+  gap: 0;
+  padding: var(--space-7) var(--space-6);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-card);
+  /* subtle gold ambient behind client agent only */
+  background-image: radial-gradient(
+    ellipse 40% 60% at 42% 50%,
+    color-mix(in srgb, var(--forged-gold) 5%, transparent),
+    transparent
+  );
+}
+
+/* ── Left column ───────────────────────────────────────── */
+.mesh-left {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+/* ── Nodes ─────────────────────────────────────────────── */
+.mesh-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-5);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-card);
+  min-width: 96px;
+}
+
+.mesh-node--user .mesh-node-glyph,
+.mesh-node--client .mesh-node-glyph {
+  font-size: 18px;
+  color: var(--ink-mute);
+}
+
+/* Client agent — gold-bordered, matches Agent A panel tint */
+.mesh-node--agent-a {
+  border-color: color-mix(in srgb, var(--forged-gold) 40%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--forged-gold) 15%, transparent);
+}
+.mesh-node--agent-a .mesh-node-glyph {
+  font-size: 18px;
+  color: var(--forged-gold);
+}
+
+.mesh-node-label {
+  font-family: var(--font-sans);
+  font-size: var(--type-body);
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.mesh-node-sub {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ink-mute);
+  white-space: nowrap;
+}
+
+/* ── Horizontal connectors between left nodes ──────────── */
+.mesh-connector--h {
+  position: relative;
+  width: 32px;
+  height: 1px;
+  background: var(--hairline-strong);
+  flex-shrink: 0;
+  overflow: visible;
+}
+/* arrowhead */
+.mesh-connector--h::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: -3px;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid var(--hairline-strong);
+}
+
+/* ── Signal pulse dots on connectors ───────────────────── */
+/*
+  Two pulses on the left-side connectors, then the SVG stem pulse,
+  then staggered ● settlements on the agents.
+  Whole cycle: 3.6 s repeat.
+  - pulse--1 (user→client):      starts 0 s
+  - pulse--2 (client→agent-a):   starts 0.4 s
+  - dot--stem (agent-a→fanout):  starts 0.8 s (SVG, see below)
+  - agent ● appear:              staggered 1.4, 1.7, 2.0, 2.3 s
+*/
+.mesh-pulse {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: var(--forged-gold);
+  opacity: 0;
+  transform: translateX(0);
+}
+
+.mesh-pulse--1 {
+  animation: pulse-travel 3.6s var(--ease-out) infinite;
+  animation-delay: 0s;
+}
+.mesh-pulse--2 {
+  animation: pulse-travel 3.6s var(--ease-out) infinite;
+  animation-delay: 0.4s;
+}
+
+@keyframes pulse-travel {
+  0%   { opacity: 0; transform: translateX(0); }
+  8%   { opacity: 1; transform: translateX(0); }
+  80%  { opacity: 1; transform: translateX(26px); }
+  90%  { opacity: 0; transform: translateX(26px); }
+  100% { opacity: 0; transform: translateX(26px); }
+}
+
+/* ── SVG fan-out ───────────────────────────────────────── */
+.mesh-svg {
+  width: 80px;
+  /* stretch height to fill diagram padding */
+  align-self: stretch;
+  overflow: visible;
+}
+
+.mesh-line {
+  stroke: var(--hairline-strong);
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.mesh-arrow {
+  fill: var(--hairline-strong);
+}
+
+/* Animated pulse dot: travels from left edge (stem) then branches appear */
+.mesh-dot--stem {
+  fill: var(--forged-gold);
+  opacity: 0;
+  animation: stem-travel 3.6s var(--ease-out) infinite;
+  animation-delay: 0.8s;
+}
+
+@keyframes stem-travel {
+  0%   { opacity: 0; cx: 0; }
+  5%   { opacity: 1; cx: 0; }
+  30%  { opacity: 1; cx: 40; }
+  /* hold at branch point */
+  40%  { opacity: 0.6; cx: 40; }
+  50%  { opacity: 0; cx: 40; }
+  100% { opacity: 0; cx: 0; }
+}
+
+/* ── Right: agent cards ────────────────────────────────── */
+.mesh-right {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-left: var(--space-2);
+}
+
+.mesh-mesh-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.mesh-agents {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.mesh-agent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  /* entrance: fade + slide-right, staggered per agent */
+  animation: agent-settle 3.6s var(--ease-out) infinite;
+  animation-delay: calc(1.4s + var(--agent-i) * 0.28s);
+}
+
+@keyframes agent-settle {
+  /*
+    Outside the settle window the card sits dim/hairline.
+    At settle time: border flashes gold, then fades back.
+    The ● glyph pops in sync via the .mesh-settled animation below.
+  */
+  0%   { border-color: var(--hairline); }
+  /* settle flash */
+  38%  { border-color: var(--hairline); }
+  42%  { border-color: color-mix(in srgb, var(--ok) 55%, transparent); }
+  52%  { border-color: color-mix(in srgb, var(--ok) 20%, transparent); }
+  70%  { border-color: color-mix(in srgb, var(--ok) 20%, transparent); }
+  100% { border-color: var(--hairline); }
+}
+
+/* ● settled glyph — pops in when the agent card settles */
+.mesh-settled {
+  font-size: 10px;
+  color: var(--ok);
+  flex-shrink: 0;
+  line-height: 1;
+  opacity: 0.25;
+  transform: scale(0.7);
+  animation: dot-pop 3.6s var(--ease-spring) infinite;
+  animation-delay: calc(1.4s + var(--agent-i) * 0.28s);
+}
+
+@keyframes dot-pop {
+  0%   { opacity: 0.25; transform: scale(0.7); }
+  38%  { opacity: 0.25; transform: scale(0.7); }
+  42%  { opacity: 1;    transform: scale(1.4); }
+  52%  { opacity: 1;    transform: scale(1);   }
+  70%  { opacity: 1;    transform: scale(1);   }
+  85%  { opacity: 0.25; transform: scale(0.8); }
+  100% { opacity: 0.25; transform: scale(0.7); }
+}
+
+.mesh-agent-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mesh-agent-name {
+  font-family: var(--font-sans);
+  font-size: var(--type-body-sm);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.mesh-agent-role {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink-dim);
+}
+
+/* ── Caption ────────────────────────────────────────────── */
+.mesh-caption {
+  margin: 0;
+  font-size: var(--type-caption);
+  letter-spacing: 0.06em;
+  line-height: 1.55;
+  color: var(--ink-dim);
+  text-align: center;
+}
+
+/* ── Reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .mesh-pulse,
+  .mesh-dot--stem {
+    display: none;
+  }
+  .mesh-agent {
+    animation: none;
+    border-color: var(--hairline);
+  }
+  .mesh-settled {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 820px) {
+  .mesh-diagram {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: var(--space-5);
+    padding: var(--space-5);
+  }
+  .mesh-left {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .mesh-svg {
+    display: none;
+  }
+  .mesh-right {
+    padding-left: 0;
+  }
+  .mesh-agents {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .mesh-note {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .mesh-agents {
+    grid-template-columns: 1fr;
+  }
+  .mesh-left {
+    gap: var(--space-2);
+  }
+  .mesh-connector--h {
+    width: 20px;
+  }
+  .mesh-node {
+    min-width: 76px;
+    padding: var(--space-3) var(--space-3);
+  }
+}

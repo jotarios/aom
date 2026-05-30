@@ -1,0 +1,121 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.console {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  grid-template-rows: auto auto 1fr auto;
+  margin: var(--space-4) auto 0;
+  width: min(100% - var(--space-6), 1400px);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+/* Keep the 1fr tracks equal: spanning items must not force a track wider. */
+.console > * {
+  min-width: 0;
+}
+
+/* INPUT / OUTPUT header band — full width above both agent cards, Input left,
+   Output right, so data flows left→right into the agents below. */
+.io-band {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--hairline-strong);
+  background: var(--surface);
+}
+
+/* Agent headers in row 2. The seam sits in the 1px center column of just that row. */
+.console > .agent-panel {
+  grid-row: 2;
+}
+.console > .seam {
+  grid-row: 2;
+}
+
+/* The shared phase timeline — spans the full width (row 3), but its inner content is
+   a centered, capped column so the checkmark spine lands at the console's true center
+   (aligned with the seam above). The gold pulse overlays this same center axis. */
+.tl-wrap {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  position: relative;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-6) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+.tl-wrap > .timeline {
+  width: 100%;
+  max-width: 860px;
+}
+
+/* Ledger spans full width as the bottom rail. */
+.console > .ledger {
+  grid-column: 1 / -1;
+  grid-row: 4;
+}
+
+.race-rails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.race-rail {
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+}
+.race-rail-label {
+  font-size: 11px;
+  color: var(--forged-gold);
+  letter-spacing: 0.08em;
+}
+
+.watchdog {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--pearl) 8%, transparent);
+  border: 1px solid var(--hairline);
+  color: var(--pearl);
+  font-size: var(--type-body-sm);
+}
+
+.floating-trigger {
+  position: fixed;
+  bottom: var(--space-7);
+  right: var(--space-6);
+  z-index: 20;
+}
+
+@media (max-width: 900px) {
+  .console {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+  .console > .io-band,
+  .console > .agent-panel,
+  .console > .ledger {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .io-band {
+    grid-template-columns: 1fr;
+  }
+  .seam {
+    display: none;
+  }
+}

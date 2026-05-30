@@ -1,0 +1,41 @@
+{
+  "id": "invoice-factoring",
+  "mode": "single",
+  "wallets": 1,
+  "resourceId": null,
+  "amountMon": "0.1",
+  "story": {
+    "hook": "A Mendoza wine producer ships 10,000 bottles. Payment in 60 days. Harvest bills due now. Net-60 became net-0.",
+    "agentA": "Supplier Wallet AI",
+    "agentB": "Factoring Oracle",
+    "outcome": "Turn net-60 into net-0.",
+    "agentBRole": "PO factoring oracle",
+    "icon": "🧾",
+    "agentADesc": "Has a confirmed purchase order but needs cash now — locks a fee to factor it.",
+    "agentBDesc": "Verifies the PO and buyer, then advances the cash and claims the discount."
+  },
+  "agentB": {
+    "label": "Verifying PO + buyer creditworthiness…",
+    "computeMs": 800,
+    "panel": "keyvalue",
+    "data": {
+      "poHash": "0x9f3c…",
+      "buyerScore": "87/100",
+      "advance": "950 USDC (95%)",
+      "fee": "50 USDC (5%)",
+      "duplicate": "none"
+    }
+  },
+  "proof": {
+    "fields": [
+      "poHash",
+      "buyerScore",
+      "advanceAmount",
+      "blockNumber"
+    ]
+  },
+  "run": {
+    "count": 4,
+    "spacingMs": 9000
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aom.local/event.schema.json",
+  "title": "AOM Event",
+  "description": "The single event-stream contract. Every message on the WS hub validates against this. Mirrored as a TS type, a pydantic model, and a Rust serde struct.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["phase", "taskId", "status", "msg"],
+  "properties": {
+    "phase": {
+      "enum": ["INTENT", "ESCROW_LOCK", "INTERCEPT", "PIPELINE", "SETTLEMENT", "REVERTED"],
+      "description": "Where in the agent flow this event sits."
+    },
+    "taskId": {
+      "type": "string",
+      "pattern": "^0x[0-9a-f]{64}$",
+      "description": "32-byte task id, 0x-prefixed lowercase hex."
+    },
+    "rail": {
+      "type": ["string", "null"],
+      "enum": ["ring", "rpc", null],
+      "description": "Which latency rail observed the intercept. null for non-INTERCEPT phases."
+    },
+    "latencyMs": {
+      "type": ["number", "null"],
+      "description": "Intercept delta in ms: reader-saw-it minus event on-chain execution timestamp. null when not an intercept observation."
+    },
+    "status": {
+      "enum": ["pending", "computing", "settled", "reverted"],
+      "description": "Coarse state for the UI status pill."
+    },
+    "reportHash": {
+      "type": ["string", "null"],
+      "pattern": "^0x[0-9a-f]{64}$",
+      "description": "keccak256 of the proof fields. Present from PIPELINE onward."
+    },
+    "txHash": {
+      "type": ["string", "null"],
+      "pattern": "^0x[0-9a-f]{64}$",
+      "description": "On-chain tx hash for lock/complete/refund."
+    },
+    "msg": {
+      "type": "string",
+      "description": "Terse human/log line for the stream."
+    },
+    "walletId": {
+      "type": ["string", "null"],
+      "description": "Which Agent A bidder (race mode). null in single mode."
+    },
+    "resourceId": {
+      "type": ["string", "null"],
+      "description": "Which contested resource (race mode). null in single mode."
+    },
+    "blockNumber": {
+      "type": ["integer", "null"],
+      "description": "Monad block number for the ledger ticker."
+    },
+    "ts": {
+      "type": ["number", "null"],
+      "description": "Producer wall-clock epoch ms when the event was emitted (for ordering/debug)."
+    }
+  },
+  "examples": [
+    {
+      "phase": "INTENT",
+      "taskId": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "rail": null,
+      "latencyMs": null,
+      "status": "pending",
+      "reportHash": null,
+      "txHash": null,
+      "msg": "Car Wallet approaches toll node A-17",
+      "walletId": null,
+      "resourceId": null,
+      "blockNumber": null,
+      "ts": 1748620800000
+    },
+    {
+      "phase": "ESCROW_LOCK",
+      "taskId": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "rail": null,
+      "latencyMs": null,
+      "status": "pending",
+      "reportHash": null,
+      "txHash": "0xabc0000000000000000000000000000000000000000000000000000000000abc",
+      "msg": "lockFunds(0x…0001) → 0.1 MON",
+      "walletId": "car-0",
+      "resourceId": null,
+      "blockNumber": 1234567,
+      "ts": 1748620800120
+    },
+    {
+      "phase": "INTERCEPT",
+      "taskId": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "rail": "ring",
+      "latencyMs": 0.6,
+      "status": "computing",
+      "reportHash": null,
+      "txHash": null,
+      "msg": "ring buffer intercept",
+      "walletId": null,
+      "resourceId": null,
+      "blockNumber": 1234567,
+      "ts": 1748620800140
+    },
+    {
+      "phase": "INTERCEPT",
+      "taskId": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "rail": "rpc",
+      "latencyMs": 312.0,
+      "status": "computing",
+      "reportHash": null,
+      "txHash": null,
+      "msg": "eth_getLogs poll matched",
+      "walletId": null,
+      "resourceId": null,
+      "blockNumber": 1234567,
+      "ts": 1748620800452
+    },
+    {
+      "phase": "PIPELINE",
+      "taskId": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "rail": null,
+      "latencyMs": null,
+      "status": "computing",
+      "reportHash": "0xdef0000000000000000000000000000000000000000000000000000000000def",
+      "txHash": null,
+      "msg": "Verifying GPS passage proof…",
+      "walletId": null,
+      "resourceId": null,
+      "blockNumber": null,
+      "ts": 1748620800160
+    },
+    {
+      "phase": "SETTLEMENT",
+      "taskId": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "rail": null,
+      "latencyMs": null,
+      "status": "settled",
+      "reportHash": "0xdef0000000000000000000000000000000000000000000000000000000000def",
+      "txHash": "0xfed0000000000000000000000000000000000000000000000000000000000fed",
+      "msg": "0.1 MON released to Toll Oracle",
+      "walletId": null,
+      "resourceId": null,
+      "blockNumber": 1234568,
+      "ts": 1748620800960
+    },
+    {
+      "phase": "REVERTED",
+      "taskId": "0x0000000000000000000000000000000000000000000000000000000000000002",
+      "rail": null,
+      "latencyMs": null,
+      "status": "reverted",
+      "reportHash": null,
+      "txHash": "0x111000000000000000000000000000000000000000000000000000000000a111",
+      "msg": "refund — lost the race, funds returned to fan-1",
+      "walletId": "fan-1",
+      "resourceId": "ticket-42",
+      "blockNumber": 1234569,
+      "ts": 1748620801010
+    }
+  ]
+}

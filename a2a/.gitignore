@@ -1,3 +1,23 @@
+# Secrets — never commit
 .env
 
-docs/prd.md
+# Node / JS
+node_modules/
+ui/dist/
+*.tsbuildinfo
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Rust
+bridge/target/
+
+# Foundry
+contracts/out/
+contracts/cache/
+contracts/lib/
+contracts/broadcast/
+.vercel
+.env*

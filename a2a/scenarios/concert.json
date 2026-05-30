@@ -1,0 +1,53 @@
+{
+  "id": "concert",
+  "mode": "race",
+  "wallets": 3,
+  "resourceId": "ticket-42",
+  "amountMon": "0.1",
+  "story": {
+    "hook": "Last-minute concert ticket. Three fans. One ticket. Fastest wallet wins.",
+    "agentA": "Fan Wallet",
+    "agentB": "Ticket Oracle",
+    "outcome": "Win the ticket race.",
+    "agentBRole": "ticket ownership oracle",
+    "icon": "🎟️",
+    "agentADesc": "One of several fans racing for the ticket — locks funds the instant it appears.",
+    "agentBDesc": "Checks the ticket isn't used or double-sold, then transfers it to the winner."
+  },
+  "agentB": {
+    "label": "Verifying ticket ownership transfer…",
+    "computeMs": 700,
+    "panel": "table",
+    "data": {
+      "columns": [
+        "check",
+        "result"
+      ],
+      "rows": [
+        [
+          "not used",
+          "pass"
+        ],
+        [
+          "not double-sold",
+          "pass"
+        ],
+        [
+          "ownership transfer",
+          "valid"
+        ]
+      ]
+    }
+  },
+  "proof": {
+    "fields": [
+      "ticketId",
+      "winnerAddress",
+      "blockNumber"
+    ]
+  },
+  "run": {
+    "count": 2,
+    "spacingMs": 9000
+  }
+}
