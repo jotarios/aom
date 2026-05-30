@@ -9,7 +9,7 @@ interface Step {
 
 const STEPS: Step[] = [
   { num: "01", glyph: "○", title: "One agent needs a job done", detail: "It sets the payment aside up front, so the other agent knows the money is there." },
-  { num: "02", glyph: "◐", title: "The other agent is pinged instantly", detail: "We spot the payment the moment it lands — no waiting, no checking back." },
+  { num: "02", glyph: "◐", title: "The other agent is hired instantly", detail: "We spot the payment the moment it lands — no waiting, no checking back." },
   { num: "03", glyph: "●", title: "Work delivered, money paid", detail: "The job is done and the payment is released automatically — in under a second." },
 ];
 
