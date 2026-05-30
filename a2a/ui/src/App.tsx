@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import type { AomEvent } from "@aom/shared";
 import { useAllScenarios, useScenario } from "./useScenario";
 import { useHub } from "./useHub";
@@ -28,6 +28,11 @@ export function App() {
   const envScenarioId = (import.meta.env.VITE_SCENARIO as string | undefined)?.trim() || "";
   const [selectedId, setSelectedId] = useState<string>(envScenarioId || "");
   const [view, setView] = useState<AppView>(envScenarioId ? "idle" : "landing");
+  const viewRef = useRef<AppView>(view);
+  const setViewSafe = (v: AppView) => {
+    viewRef.current = v;
+    setView(v);
+  };
 
   const scenario = useScenario(selectedId || undefined);
 
@@ -35,7 +40,8 @@ export function App() {
   const [now, setNow] = useState(() => Date.now());
 
   const { status: hubStatus, sendTrigger } = useHub((e) => {
-    setView("console");
+    if (viewRef.current === "landing") return;
+    setViewSafe("console");
     dispatch(e);
   });
 
@@ -90,11 +96,11 @@ export function App() {
 
   const onSelectScenario = (id: string) => {
     setSelectedId(id);
-    setView("idle");
+    setViewSafe("idle");
   };
 
   const onTrigger = () => {
-    setView("console");
+    setViewSafe("console");
     sendTrigger();
   };
 
@@ -109,7 +115,7 @@ export function App() {
       <Idle
         scenario={scenario}
         onTrigger={onTrigger}
-        onBack={() => setView("landing")}
+        onBack={() => setViewSafe("landing")}
       />
     );
   }
@@ -117,7 +123,7 @@ export function App() {
   // Console: demo running.
   return (
     <div className="app">
-      <TopBar activePhase={activePhase} hubStatus={hubStatus} />
+      <TopBar activePhase={activePhase} hubStatus={hubStatus} onHome={() => setViewSafe("landing")} />
 
       <main className="console">
         <div className="io-band">

@@ -10,15 +10,15 @@ const PHASES: { num: string; label: Phase | "INTERCEPT" }[] = [
   { num: "05", label: "SETTLEMENT" },
 ];
 
-export function TopBar({ activePhase, hubStatus }: { activePhase: Phase | null; hubStatus: HubStatus }) {
+export function TopBar({ activePhase, hubStatus, onHome }: { activePhase: Phase | null; hubStatus: HubStatus; onHome?: () => void }) {
   return (
     <header className="topbar">
-      <div className="topbar-brand mono">
+      <button className="topbar-brand mono" onClick={onHome} type="button">
         <span className="topbar-mark" aria-hidden>
           ⬣
         </span>
         Agentic Open Market
-      </div>
+      </button>
       <nav className="topbar-phases mono">
         {PHASES.map((p) => (
           <span key={p.num} className={`topbar-phase ${activePhase === p.label ? "topbar-phase-active" : ""}`}>
